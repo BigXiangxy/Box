@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BX.iml" filepath="$PROJECT_DIR$/BX.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aprouter/aprouter.iml" filepath="$PROJECT_DIR$/aprouter/aprouter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mapmodule/mapmodule.iml" filepath="$PROJECT_DIR$/mapmodule/mapmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/moremodule/moremodule.iml" filepath="$PROJECT_DIR$/moremodule/moremodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zzlibrary/zzlibrary.iml" filepath="$PROJECT_DIR$/zzlibrary/zzlibrary.iml" />
+    </modules>
+  </component>
+</project>

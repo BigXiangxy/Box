@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    publishNonDefault true
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        debug{
+
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.10-rc2'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.0.3'    // 替换成最新版本
+    testCompile 'junit:junit:4.12'
+    if (IsBuildMudle.toBoolean()) {
+        releaseCompile project(path: ':zzlibrary', configuration: 'release')
+        debugCompile project(path: ':zzlibrary', configuration: 'debug')
+    } else {
+        releaseCompile project(path: ':mapmodule', configuration: 'release')
+        debugCompile project(path: ':mapmodule', configuration: 'debug')
+
+        releaseCompile project(path: ':moremodule', configuration: 'release')
+        debugCompile project(path: ':moremodule', configuration: 'debug')
+    }
+}
