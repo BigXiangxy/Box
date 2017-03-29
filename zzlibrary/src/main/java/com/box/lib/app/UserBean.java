@@ -1,6 +1,6 @@
 package com.box.lib.app;
 
-import com.box.lib.utils.LastingUtils;
+import com.box.lib.utils.LastingUtil;
 
 import java.io.Serializable;
 
@@ -24,7 +24,7 @@ public final class UserBean implements Serializable {
      */
     public static UserBean getInstall() {
         if (_install == null)
-            _install = LastingUtils.readObject(LibApp.getApp().getApplicationContext(), user_key);
+            _install = LastingUtil.readObject(LibApp.getApp().getApplicationContext(), user_key);
         return _install;
     }
 
@@ -32,7 +32,7 @@ public final class UserBean implements Serializable {
      * 保存当前用户信息
      */
     public boolean saveInfo() {
-        if (LastingUtils.saveObject(LibApp.getApp().getApplicationContext(), this, user_key)) {
+        if (LastingUtil.saveObject(LibApp.getApp().getApplicationContext(), this, user_key)) {
             _install = this;
             return true;
         }
@@ -45,7 +45,7 @@ public final class UserBean implements Serializable {
      * @return
      */
     public boolean delete() {
-        if (LastingUtils.delete(LibApp.getApp().getApplicationContext(), user_key)) {
+        if (LastingUtil.delete(LibApp.getApp().getApplicationContext(), user_key)) {
             _install = null;
             return true;
         }

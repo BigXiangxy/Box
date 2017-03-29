@@ -1,5 +1,6 @@
 package com.xxy.bx.view;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import com.alibaba.android.arouter.facade.callback.NavigationCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.box.lib.mvp.view.BaseActivity;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xxy.bx.R;
 import com.xxy.bx.component.DaggerViewComponent;
 import com.xxy.bx.view.iv.MView;
@@ -40,6 +42,10 @@ public class MainActivity extends BaseActivity implements MView {
         ButterKnife.bind(this);
         DaggerViewComponent.builder().lifecycleComponent(getLifecycleComponet()).build().inject(this);
         presenter.setView(this);
+        initEvent();
+    }
+
+    private void initEvent() {
         RxView.clicks(start)
                 .throttleFirst(600, TimeUnit.MILLISECONDS)
                 .subscribe(o -> presenter.start());
@@ -48,23 +54,31 @@ public class MainActivity extends BaseActivity implements MView {
                 .subscribe(o -> presenter.stop());
         RxView.clicks(text)
                 .throttleFirst(600, TimeUnit.MILLISECONDS)
+                .compose(new RxPermissions(getActivity()).ensure(Manifest.permission.CAMERA))
                 .subscribe(o -> {
-                    Postcard postcard = ARouter.getInstance().build("/more/main");
-                    Bundle bundle = postcard.getExtras();
-                    bundle.putString("key1", "Value1");
-//                postcard.navigation();
-                    postcard.withFlags(3).navigation(this, 5, new NavigationCallback() {
-                        @Override
-                        public void onFound(Postcard postcard) {//能找到path，即使被拦截
-                            Log.e("navigation", "onFound");
-                        }
-
-                        @Override
-                        public void onLost(Postcard postcard) {//不能找到path
-                            Log.e("navigation", "onLost");
-                        }
-                    });
+                    if (o)
+                        navigation();
+                    else
+                        Log.e("--", "被拒绝");
                 });
+    }
+
+    private void navigation() {
+        Postcard postcard = ARouter.getInstance().build("/more/main");
+        Bundle bundle = postcard.getExtras();
+        bundle.putString("key1", "Value1");
+//                postcard.navigation();
+        postcard.withFlags(3).navigation(this, 5, new NavigationCallback() {
+            @Override
+            public void onFound(Postcard postcard) {//能找到path，即使被拦截
+                Log.e("navigation", "onFound");
+            }
+
+            @Override
+            public void onLost(Postcard postcard) {//不能找到path
+                Log.e("navigation", "onLost");
+            }
+        });
     }
 
 

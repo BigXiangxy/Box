@@ -6,7 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/aprouter/aprouter.iml" filepath="$PROJECT_DIR$/aprouter/aprouter.iml" />
       <module fileurl="file://$PROJECT_DIR$/mapmodule/mapmodule.iml" filepath="$PROJECT_DIR$/mapmodule/mapmodule.iml" />
-      <module fileurl="file://$PROJECT_DIR$/moremodule/moremodule.iml" filepath="$PROJECT_DIR$/moremodule/moremodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/permissionModule/permissionModule.iml" filepath="$PROJECT_DIR$/permissionModule/permissionModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/zzlibrary/zzlibrary.iml" filepath="$PROJECT_DIR$/zzlibrary/zzlibrary.iml" />
     </modules>
   </component>

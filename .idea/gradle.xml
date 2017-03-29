@@ -12,7 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/aprouter" />
             <option value="$PROJECT_DIR$/mapmodule" />
-            <option value="$PROJECT_DIR$/moremodule" />
+            <option value="$PROJECT_DIR$/permissionModule" />
             <option value="$PROJECT_DIR$/zzlibrary" />
           </set>
         </option>

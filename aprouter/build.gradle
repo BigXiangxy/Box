@@ -53,7 +53,7 @@ dependencies {
         releaseCompile project(path: ':mapmodule', configuration: 'release')
         debugCompile project(path: ':mapmodule', configuration: 'debug')
 
-        releaseCompile project(path: ':moremodule', configuration: 'release')
-        debugCompile project(path: ':moremodule', configuration: 'debug')
+        releaseCompile project(path: ':permissionModule', configuration: 'release')
+        debugCompile project(path: ':permissionModule', configuration: 'debug')
     }
 }

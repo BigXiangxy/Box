@@ -1,1 +1,1 @@
-include ':app', ':zzlibrary', ':aprouter', ':mapmodule', ':moremodule'
+include ':app', ':zzlibrary', ':aprouter', ':mapmodule', ':permissionModule'
