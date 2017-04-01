@@ -41,8 +41,9 @@ public abstract class BasePresenter<V extends IView> {
 
     /**
      * 检查网络(使用了 doOnSubscribe()方法)
-     * 添加了基本线程调度
-     * 绑定了生命周期
+     * <p>
+     * 已经 添加了基本线程调度
+     * 已经 绑定了生命周期
      *
      * @param <T>
      * @return
@@ -53,8 +54,9 @@ public abstract class BasePresenter<V extends IView> {
 
     /**
      * 检查网络(使用了 doOnSubscribe()方法)
-     * 添加了基本线程调度
-     * 绑定了生命周期
+     * <p>
+     * 已经 添加了基本线程调度
+     * 已经 绑定了生命周期
      *
      * @param <T>
      * @return

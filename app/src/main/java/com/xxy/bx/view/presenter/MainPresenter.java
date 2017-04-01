@@ -11,6 +11,7 @@ import com.xxy.bx.view.iv.MView;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -31,7 +32,7 @@ public class MainPresenter extends BasePresenter<MView> {
         locationService.start();
         if (disposable != null && !disposable.isDisposed()) disposable.dispose();
         disposable = RxLocBus.getDefault().toObserverable()
-                .compose(checkNetWork())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(location -> Log.e("-", location.getAddrStr()), Throwable::printStackTrace);
     }
 
