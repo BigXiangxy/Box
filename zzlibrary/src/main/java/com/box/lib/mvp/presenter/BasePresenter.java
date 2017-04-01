@@ -1,10 +1,9 @@
 package com.box.lib.mvp.presenter;
 
-import com.box.lib.app.MainApp;
 import com.box.lib.mvp.view.IView;
 import com.box.lib.utils.NetUtil;
-import com.box.lib.utils.ToastUtil;
 import com.trello.rxlifecycle2.LifecycleProvider;
+import com.trello.rxlifecycle2.LifecycleTransformer;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -31,31 +30,46 @@ public abstract class BasePresenter<V extends IView> {
     }
 
     /**
-     * 是否包含了网络操作
+     * 绑定生命周期
      *
-     * @param isNetWork
      * @param <T>
      * @return
      */
-    public <T> ObservableTransformer<T, T> applySchedulers(final boolean isNetWork) {
-        return new ObservableTransformer<T, T>() {
+    protected final <T> LifecycleTransformer<T> bindToLifecycle() {
+        return lifecycleProvider.bindToLifecycle();
+    }
 
+    /**
+     * 检查网络(使用了 doOnSubscribe()方法)
+     * 添加了基本线程调度
+     * 绑定了生命周期
+     *
+     * @param <T>
+     * @return
+     */
+    protected final <T> ObservableTransformer<T, T> checkNetWork() {
+        return checkNetWork(null);
+    }
+
+    /**
+     * 检查网络(使用了 doOnSubscribe()方法)
+     * 添加了基本线程调度
+     * 绑定了生命周期
+     *
+     * @param <T>
+     * @return
+     */
+    protected final <T> ObservableTransformer<T, T> checkNetWork(Consumer<Disposable> consumer) {
+        return new ObservableTransformer<T, T>() {
             @Override
-            public ObservableSource<T> apply(Observable<T> upstream) {
-                if (lifecycleProvider != null) {
-                    upstream.compose(lifecycleProvider.bindToLifecycle());
-                }
-                return upstream.doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        if (isNetWork && !disposable.isDisposed() && !NetUtil.isNetworkAvailable(MainApp.getApp().getApplicationContext())) {
-                            ToastUtil.getInstance().show("当前网络不可用，请检查您的网络设置");
-                            disposable.dispose();
-                        }
-                    }
-                }).subscribeOn(Schedulers.io())
+            public ObservableSource<T> apply(Observable upstream) {
+                return upstream.doOnSubscribe(new NetUtil.CheckNetWorkConsumer(consumer))
+                        .subscribeOn(Schedulers.io())
+                        .compose(bindToLifecycle())
                         .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
+
+
 }

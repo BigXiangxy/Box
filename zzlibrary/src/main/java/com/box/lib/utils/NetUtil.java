@@ -6,7 +6,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
+import com.box.lib.app.MainApp;
+
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 public class NetUtil {
 
@@ -80,5 +85,28 @@ public class NetUtil {
         if (activeNetInfo != null && activeNetInfo.getType() == ConnectivityManager.TYPE_MOBILE)
             return true;
         return false;
+    }
+
+    public static class CheckNetWorkConsumer implements Consumer<Disposable> {
+        private Consumer<Disposable> consumer;
+
+        public CheckNetWorkConsumer() {
+
+        }
+
+        public CheckNetWorkConsumer(Consumer<Disposable> consumer) {
+            this.consumer = consumer;
+        }
+
+        @Override
+        public void accept(Disposable disposable) throws Exception {
+            if (!disposable.isDisposed() && !NetUtil.isNetworkAvailable(MainApp.getApp().getApplicationContext())) {
+                ToastUtil.getInstance().show("当前网络不可用，请检查您的网络设置");
+                disposable.dispose();
+                return;
+            }
+            if (consumer != null)
+                consumer.accept(disposable);
+        }
     }
 }
