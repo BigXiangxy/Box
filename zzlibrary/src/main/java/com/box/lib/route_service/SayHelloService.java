@@ -1,4 +1,4 @@
-package com.box.lib.loction;
+package com.box.lib.route_service;
 
 import com.alibaba.android.arouter.facade.template.IProvider;
 
