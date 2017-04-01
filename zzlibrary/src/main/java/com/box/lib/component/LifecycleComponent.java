@@ -3,7 +3,7 @@ package com.box.lib.component;
 import android.content.Context;
 
 import com.box.lib.app.MainApp;
-import com.box.lib.inject.ActivityScope;
+import com.box.lib.inject.LifecycleScope;
 import com.box.lib.loction.LocationService;
 import com.box.lib.module.LifecycleModule;
 import com.box.lib.mvp.view.BaseActivity;
@@ -15,7 +15,7 @@ import dagger.Component;
 /**
  * Created by Administrator on 2017/3/9 0009.
  */
-@ActivityScope
+@LifecycleScope
 @Component(dependencies = {AppComponent.class}, modules = {LifecycleModule.class})
 public interface LifecycleComponent {
     MainApp provideApp();

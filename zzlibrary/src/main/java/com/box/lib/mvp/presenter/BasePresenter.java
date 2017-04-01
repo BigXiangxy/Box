@@ -49,7 +49,7 @@ public abstract class BasePresenter<V extends IView> {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
                         if (isNetWork && !disposable.isDisposed() && !NetUtil.isNetworkAvailable(MainApp.getApp().getApplicationContext())) {
-                            ToastUtil.showToast("当前网络不可用，请检查您的网络设置");
+                            ToastUtil.getInstance().show("当前网络不可用，请检查您的网络设置");
                             disposable.dispose();
                         }
                     }

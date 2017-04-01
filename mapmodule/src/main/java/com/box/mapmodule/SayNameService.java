@@ -14,7 +14,7 @@ import com.box.lib.utils.ToastUtil;
 public class SayNameService implements SayHelloService {
     @Override
     public String say(String name) {
-        ToastUtil.showToast(name);
+        ToastUtil.getInstance().show(name);
         Log.e("SayNameService", "namne---------------------!");
         return "say: " + name;
     }

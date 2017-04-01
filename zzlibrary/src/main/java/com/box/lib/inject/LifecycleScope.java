@@ -6,10 +6,11 @@ import javax.inject.Scope;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-/**子
+/**
  * Created by Administrator on 2017/3/14 0014.
+ * 生命与@ActivityScope相同
  */
 @Scope
 @Retention(RUNTIME)
-public @interface NoModuleScope {
+public @interface LifecycleScope {
 }

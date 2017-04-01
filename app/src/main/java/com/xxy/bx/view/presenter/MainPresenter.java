@@ -2,7 +2,7 @@ package com.xxy.bx.view.presenter;
 
 import android.util.Log;
 
-import com.box.lib.inject.NoModuleScope;
+import com.box.lib.inject.ActivityScope;
 import com.box.lib.loction.LocationService;
 import com.box.lib.loction.RxLocBus;
 import com.box.lib.mvp.presenter.BasePresenter;
@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Administrator on 2017/3/9 0009.
  */
-@NoModuleScope
+@ActivityScope
 public class MainPresenter extends BasePresenter<MView> {
     private LocationService locationService;
     private Disposable disposable;

@@ -1,6 +1,6 @@
 package com.box.lib.module;
 
-import com.box.lib.inject.ActivityScope;
+import com.box.lib.inject.LifecycleScope;
 import com.trello.rxlifecycle2.LifecycleProvider;
 
 import dagger.Module;
@@ -18,7 +18,7 @@ public class LifecycleModule {
         mLifecycleProvider = lifecycleProvider;
     }
 
-    @ActivityScope
+    @LifecycleScope
     @Provides
     LifecycleProvider providerLifecycle() {
         return mLifecycleProvider;
