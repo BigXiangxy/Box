@@ -4,7 +4,7 @@
     package="com.box.moremodule">
 
     <application
-        android:name="com.box.lib.app.LibApp"
+        android:name="com.box.lib.app.MainApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/more_app_name"

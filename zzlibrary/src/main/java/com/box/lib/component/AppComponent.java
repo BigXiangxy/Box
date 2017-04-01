@@ -2,12 +2,11 @@ package com.box.lib.component;
 
 import android.content.Context;
 
-import com.box.lib.module.AppModule;
-import com.box.lib.app.LibApp;
-import com.box.lib.module.LocModule;
+import com.box.lib.app.MainApp;
+import com.box.lib.inject.AppScope;
 import com.box.lib.loction.LocationService;
-
-import javax.inject.Singleton;
+import com.box.lib.module.AppModule;
+import com.box.lib.utils.AppActivityManager;
 
 import dagger.Component;
 
@@ -15,13 +14,17 @@ import dagger.Component;
  * Created by Administrator on 2017/3/13 0013.
  */
 
-@Singleton
-@Component(modules = {AppModule.class, LocModule.class})
+@AppScope
+@Component(modules = {AppModule.class})
 public interface AppComponent {
 
-    LibApp provideApp();
+    MainApp provideApp();
 
     Context provideContext();
 
     LocationService provideLocationService();
+
+    AppActivityManager provideActivityManager();
+
+    void inject(MainApp app);
 }

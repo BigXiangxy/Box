@@ -2,10 +2,12 @@ package com.box.lib.component;
 
 import android.content.Context;
 
-import com.box.lib.app.LibApp;
+import com.box.lib.app.MainApp;
 import com.box.lib.inject.ActivityScope;
 import com.box.lib.loction.LocationService;
 import com.box.lib.module.LifecycleModule;
+import com.box.lib.mvp.view.BaseActivity;
+import com.box.lib.utils.AppActivityManager;
 import com.trello.rxlifecycle2.LifecycleProvider;
 
 import dagger.Component;
@@ -16,11 +18,15 @@ import dagger.Component;
 @ActivityScope
 @Component(dependencies = {AppComponent.class}, modules = {LifecycleModule.class})
 public interface LifecycleComponent {
-    LibApp provideApp();
+    MainApp provideApp();
 
     Context provideContext();
 
     LocationService provideLocationService();
 
     LifecycleProvider providerLifecycle();
+
+    AppActivityManager providerActivityManager();
+
+    void inject(BaseActivity baseActivity);
 }

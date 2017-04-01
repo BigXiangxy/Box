@@ -2,9 +2,8 @@ package com.box.lib.module;
 
 import android.content.Context;
 
-import com.box.lib.app.LibApp;
-
-import javax.inject.Singleton;
+import com.box.lib.app.MainApp;
+import com.box.lib.inject.AppScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,21 +13,21 @@ import dagger.Provides;
  */
 @Module
 public class AppModule {
-    private LibApp libApp;
+    private MainApp mainApp;
 
-    public AppModule(LibApp libApp) {
-        this.libApp = libApp;
+    public AppModule(MainApp mainApp) {
+        this.mainApp = mainApp;
     }
 
-    @Singleton
+    @AppScope
     @Provides
-    LibApp provideApp() {
-        return libApp;
+    MainApp provideApp() {
+        return mainApp;
     }
 
-    @Singleton
+    @AppScope
     @Provides
     Context provideContext() {
-        return libApp.getApplicationContext();
+        return mainApp.getApplicationContext();
     }
 }

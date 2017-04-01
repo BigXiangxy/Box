@@ -7,14 +7,19 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.box.lib.inject.AppScope;
+
+import javax.inject.Inject;
 
 /**
  * @author baidu
  */
+@AppScope
 public class LocationService implements BDLocationListener {
     private Object objLock = new Object();
     private LocationClient client = null;
 
+    @Inject
     public LocationService(Context context) {
         synchronized (objLock) {
             if (client == null) {

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 
-import com.box.lib.app.LibApp;
+import com.box.lib.app.MainApp;
 import com.box.lib.component.DaggerLifecycleComponent;
 import com.box.lib.component.LifecycleComponent;
 import com.box.lib.module.LifecycleModule;
@@ -13,24 +13,30 @@ import com.box.lib.utils.AppActivityManager;
 import com.box.lib.utils.ToastUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import javax.inject.Inject;
+
 /**
  * Created by Administrator on 2017/3/9 0009.
  */
 
 public class BaseActivity extends RxAppCompatActivity {
     private LifecycleComponent lifecycleComponent;
+    @Inject
+    AppActivityManager activityManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppActivityManager.getInstance().addActivity(this);
+        if (lifecycleComponent == null)
+            lifecycleComponent = DaggerLifecycleComponent.builder().appComponent(((MainApp) getApplication()).getAppComponent()).lifecycleModule(new LifecycleModule(this)).build();
+        lifecycleComponent.inject(this);
+        activityManager.add(this);
     }
 
     @Override
     protected void onDestroy() {
-        AppActivityManager.getInstance().finishActivity(this);
+        activityManager.remove(this);
         super.onDestroy();
-        ToastUtil.cancelToast();
     }
 
     protected <T extends Activity> T getActivity() {
@@ -38,8 +44,6 @@ public class BaseActivity extends RxAppCompatActivity {
     }
 
     protected LifecycleComponent getLifecycleComponet() {
-        if (lifecycleComponent == null)
-            lifecycleComponent = DaggerLifecycleComponent.builder().appComponent(((LibApp) getApplication()).getAppComponent()).lifecycleModule(new LifecycleModule(this)).build();
         return lifecycleComponent;
     }
 
@@ -60,6 +64,6 @@ public class BaseActivity extends RxAppCompatActivity {
      * @param gravity 显示的位置(Gravity.BOTTOM)
      */
     public void showToast(String msg, int gravity) {
-        ToastUtil.showToast(msg, gravity);
+        ToastUtil.getInstance().show(msg, gravity);
     }
 }

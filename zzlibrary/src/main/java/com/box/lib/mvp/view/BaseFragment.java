@@ -2,7 +2,7 @@ package com.box.lib.mvp.view;
 
 import android.view.Gravity;
 
-import com.box.lib.app.LibApp;
+import com.box.lib.app.MainApp;
 import com.box.lib.component.DaggerLifecycleComponent;
 import com.box.lib.component.LifecycleComponent;
 import com.box.lib.module.LifecycleModule;
@@ -18,7 +18,7 @@ public abstract class BaseFragment extends RxFragment {
 
     protected LifecycleComponent getLifecycleComponet() {
         if (lifecycleComponent == null)
-            lifecycleComponent = DaggerLifecycleComponent.builder().appComponent(((LibApp) getContext()).getAppComponent()).lifecycleModule(new LifecycleModule(this)).build();
+            lifecycleComponent = DaggerLifecycleComponent.builder().appComponent(((MainApp) getContext()).getAppComponent()).lifecycleModule(new LifecycleModule(this)).build();
         return lifecycleComponent;
     }
 
@@ -39,6 +39,6 @@ public abstract class BaseFragment extends RxFragment {
      * @param gravity 显示的位置(Gravity.BOTTOM)
      */
     public static void showToast(String msg, int gravity) {
-        ToastUtil.showToast(msg, gravity);
+        ToastUtil.getInstance().show(msg, gravity);
     }
 }
