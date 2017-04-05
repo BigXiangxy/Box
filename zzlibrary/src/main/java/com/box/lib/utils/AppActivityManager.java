@@ -24,6 +24,8 @@ public class AppActivityManager {
 
     /**
      * 添加Activity到堆栈
+     *
+     * @param activity
      */
     public void add(Activity activity) {
         if (activityStack == null) ;
@@ -32,6 +34,8 @@ public class AppActivityManager {
 
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
+     *
+     * @return
      */
     public Activity getTop() {
         return activityStack.lastElement();
@@ -46,6 +50,8 @@ public class AppActivityManager {
 
     /**
      * 结束指定的Activity
+     *
+     * @param activity
      */
     public void remove(Activity activity) {
         if (activity != null)
@@ -54,6 +60,8 @@ public class AppActivityManager {
 
     /**
      * 结束指定类名的Activity
+     *
+     * @param cls
      */
     public void remove(Class<?> cls) {
         for (Activity activity : activityStack) {

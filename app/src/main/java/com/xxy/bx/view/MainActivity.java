@@ -34,7 +34,6 @@ public class MainActivity extends BaseActivity implements MView {
     @BindView(R.id.stop)
     Button stop;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
