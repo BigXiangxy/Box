@@ -4,11 +4,6 @@ package com.box.lib.http;
 import com.box.lib.BuildConfig;
 import com.box.lib.http.gson.GsonConverterFactory;
 
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -17,61 +12,48 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * Created by Box Administrator on 2016/7/18 0018.
  */
 public class HttpBase {
-    private static final int DEFAULT_TIMEOUT = 5;//超时s
+    public static final String PROGRESS_DOWN_TAG = "progress_tag_down";
+    public static final String PROGRESS_UP_TAG = "progress_tag_up";
+
+    private static HttpBase httpBase;
     /**
      * 默认URL
      */
-    private static String BASE_URL = BuildConfig.DEBUG + "";
+    private static String BASE_URL = "http://cdnq.duitang.com";//https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1492516121489&di=76e7fcc080a9e5cc7e98f5f6f4148837&imgtype=0&src=http%3A%2F%2Fimg.bbs.pchome.net%2Fdcbbs%2F263_1000%2F262894.jpg
 
-    private String urlHome;//URL地址
     private Retrofit retrofit;
 
-
-    private OkHttpClient.Builder defaultOkHttpClientBuilder() {
-        return defaultOkHttpClientBuilder(null);
-    }
-
-    private OkHttpClient.Builder defaultOkHttpClientBuilder(Interceptor[] interceptors) {
-        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        if (BuildConfig.DEBUG)
-            okHttpClientBuilder.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
-        if (interceptors != null)
-            for (Interceptor i : interceptors)
-                if (i != null) okHttpClientBuilder.addInterceptor(i);
-        return okHttpClientBuilder;
-    }
-
-    private void buildRetrofit(String url, OkHttpClient.Builder builder) {
-        this.urlHome = url;
-        if (retrofit == null)
+    /**
+     * @param url
+     */
+    private HttpBase(String url) {
+        if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .client(builder.build())
-                    .baseUrl(urlHome)
+                    .client(OkHttpBase.getInstance()
+//                            .addInterceptor(new UpLoadProgressInterceptor())
+//                            .addInterceptor(new DownloadProgressInterceptor())
+                            .getOkHttpClient())
+                    .baseUrl(url)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-    }
-
-    private HttpBase(String url) {
-        buildRetrofit(url, defaultOkHttpClientBuilder());
-    }
-
-    private HttpBase(String url, OkHttpClient.Builder builder) {
-        buildRetrofit(url, builder);
-    }
-
-    private static class SingletonHolder {
-        private static final HttpBase INSTANCE = new HttpBase(BASE_URL);
+        }
     }
 
     /**
-     * 默认网络
+     * 统一请求类
      *
      * @return
      */
     public static HttpBase getInstance() {
-        return SingletonHolder.INSTANCE;
+        if (httpBase == null) {
+            synchronized (HttpBase.class) {
+                if (httpBase == null)
+                    httpBase = new HttpBase(BASE_URL);
+            }
+        }
+        return httpBase;
     }
 
     /**
@@ -81,7 +63,7 @@ public class HttpBase {
      * @return
      */
     public static HttpBase getTempInstance(String baseUrl) {
-        if (baseUrl == BASE_URL) return SingletonHolder.INSTANCE;
+        if (baseUrl == BASE_URL) return getInstance();
         return new HttpBase(baseUrl);
     }
 
