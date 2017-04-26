@@ -38,6 +38,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements MView {
     @Inject
@@ -110,6 +113,29 @@ public class MainActivity extends BaseActivity implements MView {
                         Log.e("aa", "------------------");
                     }
                 });
+
+
+        HttpBase.getInstance().createApi(TextService.class)
+                .downloadFile("/uploads/blog/201309/16/20130916142913_tkxNZ.jpeg", "down_1", "up_2","12","123","1234","12345","123456")
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+
+        try {
+            HttpBase.getInstance().createApi(TextService.class)
+                    .downloadFile("/uploads/blog/201309/16/20130916142913_tkxNZ.jpeg", "down_1", "up_2","12","123","1234","12345","123456")
+                    .execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void navigation() {
@@ -160,7 +186,6 @@ public class MainActivity extends BaseActivity implements MView {
             }
             if (!file.exists())
                 file.createNewFile();
-            Log.e("File", file.getPath());
             InputStream is = responseBody.byteStream();
             FileOutputStream fos = new FileOutputStream(file);
             BufferedInputStream bis = new BufferedInputStream(is);
@@ -173,6 +198,7 @@ public class MainActivity extends BaseActivity implements MView {
             fos.close();
             bis.close();
             is.close();
+            Log.e("File", file.getPath());
             return true;
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -3,7 +3,13 @@ package com.box.lib.http;
 
 import com.box.lib.BuildConfig;
 import com.box.lib.http.gson.GsonConverterFactory;
+import com.box.lib.http.interceptor.ProgressInterceptor;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+
+import retrofit2.Call;
+import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -30,13 +36,28 @@ public class HttpBase {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .client(OkHttpBase.getInstance()
-//                            .addInterceptor(new UpLoadProgressInterceptor())
-//                            .addInterceptor(new DownloadProgressInterceptor())
-                            .getOkHttpClient())
+                            .addInterceptor(new ProgressInterceptor())
+                            .buildOkHttpClient())
                     .baseUrl(url)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(new CallAdapter.Factory() {
+                        @Override
+                        public CallAdapter<String, Boolean> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
+                            return new CallAdapter<String, Boolean>() {
+                                @Override
+                                public Type responseType() {
+                                    return null;
+                                }
+
+                                @Override
+                                public Boolean adapt(Call<String> call) {
+                                    return null;
+                                }
+                            };
+                        }
+                    })
                     .build();
         }
     }

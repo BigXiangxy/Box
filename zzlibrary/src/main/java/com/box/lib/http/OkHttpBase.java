@@ -1,9 +1,10 @@
 package com.box.lib.http;
 
 import com.box.lib.BuildConfig;
-import com.box.lib.http.interceptor.DownloadProgressInterceptor;
+import com.box.lib.http.cookie.CookieJarImpl;
+import com.box.lib.http.cookie.store.CookieStore;
+import com.box.lib.http.cookie.store.MemoryCookieStore;
 import com.box.lib.http.interceptor.HeaderInterceptor;
-import com.box.lib.http.interceptor.UpLoadProgressInterceptor;
 import com.box.lib.http.model.HttpHeaders;
 
 import java.io.InputStream;
@@ -30,9 +31,9 @@ public class OkHttpBase {
     private HeaderInterceptor headerInterceptor;
     private int mRetryCount = 3;                                //全局超时重试次数
 
-//    private CacheMode mCacheMode;                               //全局缓存模式
+    //    private CacheMode mCacheMode;                               //全局缓存模式
 //    private long mCacheTime = CacheEntity.CACHE_NEVER_EXPIRE;   //全局缓存过期时间,默认永不过期
-//    private CookieJarImpl cookieJar;                            //全局 Cookie 实例
+    private CookieJarImpl cookieJar;                            //全局 Cookie 实例
 //    private HttpParams mCommonParams;                           //全局公共请求参数
 
     private OkHttpBase() {
@@ -41,12 +42,11 @@ public class OkHttpBase {
                 .hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier)//https的自定义域名访问规则
                 .connectTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .readTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .writeTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .addInterceptor(new UpLoadProgressInterceptor())
-                .addInterceptor(new DownloadProgressInterceptor());
+                .writeTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
         if (BuildConfig.DEBUG)
             okHttpClientBuilder.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
         headerInterceptor = new HeaderInterceptor();
+        cookieJar = new CookieJarImpl(new MemoryCookieStore());//默认内存
     }
 
     public static OkHttpBase getInstance() {
@@ -59,10 +59,11 @@ public class OkHttpBase {
         return okHttpBase;
     }
 
-    public OkHttpClient getOkHttpClient() {
+    public OkHttpClient buildOkHttpClient() {
         if (okHttpClient == null) {
-            okHttpClient = okHttpClientBuilder.build();
             okHttpClientBuilder.addInterceptor(new HeaderInterceptor());
+            okHttpClientBuilder.cookieJar(cookieJar);
+            okHttpClient = okHttpClientBuilder.build();
         }
         return okHttpClient;
     }
@@ -91,6 +92,21 @@ public class OkHttpBase {
     public OkHttpBase addInterceptor(Interceptor interceptor) {
         okHttpClientBuilder.addInterceptor(interceptor);
         return this;
+    }
+
+    /**
+     * 全局cookie存取规则
+     */
+    public OkHttpBase setCookieStore(CookieStore cookieStore) {
+        cookieJar = new CookieJarImpl(cookieStore);
+        return this;
+    }
+
+    /**
+     * 获取全局的cookie实例
+     */
+    public CookieJarImpl getCookieJar() {
+        return cookieJar;
     }
 
     //----------------------------- https 证书/域名解析 -----------------------------------------------------------
